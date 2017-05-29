@@ -15,6 +15,6 @@ defmodule Computer.Command do
   end
 
   @spec duration(t) :: integer
-  def duration(command), do:
+  def duration(%Command{} = command), do:
     command.wait + command.process
 end
