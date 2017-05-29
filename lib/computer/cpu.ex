@@ -4,7 +4,7 @@ defmodule Computer.Cpu do
 
   defstruct [:command]
 
-  @type t :: %Cpu{command: Command}
+  @opaque t :: %Cpu{command: Command}
 
   def new() do
     {:ok, command} = Command.new()
@@ -12,7 +12,7 @@ defmodule Computer.Cpu do
   end
 
   @spec fetch(t, Command) :: {:ok, t} | {:busy, integer}
-  def fetch(cpu, command) do
+  def fetch(%Cpu{} = cpu, %Command{} = command) do
     case idle?(cpu) do
       true -> {:ok, %Cpu{command: command}}
       false -> {:busy, Command.duration(cpu.command)}
@@ -20,7 +20,7 @@ defmodule Computer.Cpu do
   end
 
   @spec tick(t) :: {Command.unit, t}
-  def tick(cpu) do
+  def tick(%Cpu{} = cpu) do
     case cpu.command do
       %{wait: 0, process: 0} ->
         {:idle, cpu}
@@ -33,7 +33,7 @@ defmodule Computer.Cpu do
     end
   end
 
-  def idle?(cpu) do
+  def idle?(%Cpu{} = cpu) do
     Command.duration(cpu.command) < 1
   end
 end

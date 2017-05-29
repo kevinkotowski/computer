@@ -7,10 +7,11 @@ defmodule CpuTest do
 
   test "new cpu" do
     cpu = Cpu.new()
-    assert {:idle, _cpu} = Cpu.tick(cpu)
     assert cpu.command.sync == :block
     assert cpu.command.wait == 0
     assert cpu.command.process == 0
+    assert true = Cpu.idle?(cpu)
+    assert {:idle, _cpu} = Cpu.tick(cpu)
   end
 
   test "cpu fetch is okay" do
