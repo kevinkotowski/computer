@@ -23,12 +23,12 @@ defmodule Computer do
   """
   alias __MODULE__
 
-  defstruct [:tick, :requests, :Queue, :cpus]
+  defstruct [:tick, :requests, :queue, :cpus]
 
   @opaque t :: %Computer{
     tick: integer,
     requests: Computer.Queue,
-    Queue: Computer.Queue,
+    queue: Computer.Queue,
     cpus: integer
   }
 
