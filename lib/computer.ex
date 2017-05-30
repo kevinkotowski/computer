@@ -16,19 +16,19 @@ defmodule Computer do
   ]
   #computer
   {
-    CommandQueue: 1024,
-    Queue: 64,
+    requests: 1024,
+    tasks: 64,
     cpus: 4
   }
   """
   alias __MODULE__
 
-  defstruct [:tick, :requests, :queue, :cpus]
+  defstruct [:tick, :requests, :tasks, :cpus]
 
   @opaque t :: %Computer{
     tick: integer,
     requests: Computer.Queue,
-    queue: Computer.Queue,
+    tasks: Computer.Queue,
     cpus: integer
   }
 
