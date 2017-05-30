@@ -7,7 +7,7 @@ defmodule Computer.Cpu do
   @opaque t :: %Cpu{command: Command}
 
   def new() do
-    {:ok, command} = Command.new()
+    {:ok, command} = Command.new
     %Cpu{command: command}
   end
 
