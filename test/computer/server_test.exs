@@ -7,7 +7,7 @@ defmodule SeverTest do
   alias Computer.Command
 
   test "new server" do
-    server = Server.new
+    server = Server.new()
     assert server.tick == 0
     assert Queue.ticks(server.requests) == 0
   end

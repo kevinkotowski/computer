@@ -14,7 +14,7 @@ defmodule Computer.Multiqueue do
     range = 1..count
     %Multiqueue{queues:
       Enum.reduce(range, [], fn(_, queues) ->
-        queues ++ [Computer.Queue.new]
+        queues ++ [Computer.Queue.new()]
       end)
     }
   end

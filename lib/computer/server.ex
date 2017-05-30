@@ -16,9 +16,9 @@ defmodule Computer.Server do
   def new() do
     %Server{
       tick: 0,
-      requests: Computer.Queue.new,
-      tasks: Computer.Queue.new,
-      cpus: [Cpu.new]
+      requests: Computer.Queue.new(),
+      tasks: Computer.Queue.new(),
+      cpus: [Cpu.new()]
     }
   end
 

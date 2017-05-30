@@ -6,7 +6,7 @@ defmodule QueueTest do
   alias Computer.Command
 
   test "new command queue" do
-    queue = Queue.new
+    queue = Queue.new()
     assert Queue.ticks(queue) == 0
   end
 
