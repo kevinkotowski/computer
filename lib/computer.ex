@@ -6,17 +6,13 @@ defmodule Computer do
   @doc """
   #program
   [
-    {:block, {process: 10}},
-    {:block, {wait: 200, process: 10}},
-    {:async, {wait: 200, process: 10}},
-    {:block, {process: 40}},
-    {:block, {process: 50}},
-    {:async, {wait: 100, process: 10}},
-    {:block, {process: 100}}
+    {process: 10},
+    {wait: 200, process: 10},
+    {sync: :async, wait: 200, process: 10},
   ]
   #computer
   {
-    requests: 1024,
+    requests: 16,
     tasks: 64,
     cpus: 4
   }

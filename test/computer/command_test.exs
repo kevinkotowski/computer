@@ -24,6 +24,12 @@ defmodule CommandTest do
     assert Command.duration(command) == 15
   end
 
+  test "partial command async" do
+    assert {:ok, command} = Command.new(%{sync: :async, process: 10})
+    assert command.sync == :async
+    assert Command.duration(command) == 10
+  end
+
   test "full command" do
     assert {:ok, command} = Command.new(%{sync: :async, wait: 5, process: 10})
     assert command.sync == :async

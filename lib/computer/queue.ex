@@ -24,9 +24,12 @@ defmodule Computer.Queue do
   end
 
   def ticks(%Queue{} = queue) do
-    Enum.reduce queue.commands, 0, fn(command, acc) ->
-      ticks = Command.duration(command)
-      ticks + acc
+    case queue.commands do
+      nil -> 0
+      _ -> Enum.reduce queue.commands, 0, fn(command, acc) ->
+        ticks = Command.duration(command)
+        ticks + acc
+      end
     end
   end
 end

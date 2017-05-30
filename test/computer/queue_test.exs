@@ -5,9 +5,9 @@ defmodule QueueTest do
   alias Computer.Queue
   alias Computer.Command
 
-  test "new queue queue" do
+  test "new command queue" do
     queue = Queue.new
-    assert queue.commands == nil
+    assert Queue.ticks(queue) == 0
   end
 
   test "push and pop commands" do
