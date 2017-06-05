@@ -3,7 +3,6 @@ defmodule MultiqueueTest do
   doctest Computer.Multiqueue
 
   alias Computer.Multiqueue
-  alias Computer.Queue
   alias Computer.Command
 
   test "new multiqueue" do
@@ -12,24 +11,49 @@ defmodule MultiqueueTest do
 
     multi = Multiqueue.new(4)
     assert Multiqueue.count(multi) == 4
+    assert Multiqueue.ticks(multi) == [0,0,0,0]
   end
 
   test "push and pop commands" do
-    # {:ok, command1} = Command.new(%{process: 1})
-    # {:ok, command2} = Command.new(%{process: 2})
-    # {:ok, command3} = Command.new(%{process: 3})
-    # queue = Queue.new()
-    # queue = Queue.push(queue, command1)
-    # queue = Queue.push(queue, command2)
-    # queue = Queue.push(queue, command3)
-    # assert Queue.ticks(queue) == 6
-    #
-    # {queue, command} = Queue.pop(queue)
-    # assert Command.duration(command) == 1
-    # {queue, command} = Queue.pop(queue)
-    # assert Command.duration(command) == 2
-    # assert Queue.ticks(queue) == 3
+    {:ok, command1} = Command.new(%{process: 1})
+    {:ok, command2} = Command.new(%{process: 2})
+    {:ok, command3} = Command.new(%{process: 3})
+
+    multi = Multiqueue.new(3)
+      |> Multiqueue.push(command3)
+      |> Multiqueue.push(command1)
+      |> Multiqueue.push(command2)
+    assert Multiqueue.shortest(multi) == 1
+    assert Multiqueue.ticks(multi) == [3,1,2]
+
+    {:ok, command4} = Command.new(%{process: 4})
+    {:ok, command5} = Command.new(%{process: 5})
+    {:ok, command6} = Command.new(%{process: 6})
+    multi = Multiqueue.push(multi, command4)
+      |> Multiqueue.push(command5)
+      |> Multiqueue.push(command6)
+    assert Multiqueue.ticks(multi) == [9,5,7]
+
+    {multi, command} = Multiqueue.pop(multi)
+    assert Command.duration(command) == 3
+    assert Multiqueue.ticks(multi) == [5,7,6]
+
+    {multi, command} = Multiqueue.pop(multi)
+    assert Command.duration(command) == 1
+    assert Multiqueue.ticks(multi) == [7,6,4]
+
+    {multi, command} = Multiqueue.pop(multi)
+    assert Command.duration(command) == 2
+    assert Multiqueue.ticks(multi) == [6,4,5]
+
+    {multi, command} = Multiqueue.pop(multi)
+    assert Command.duration(command) == 6
+    assert Multiqueue.ticks(multi) == [4,5,0]
   end
 
-  def new_program
+  def new_program(count) do
+     Enum.reduce(1..count, [], fn(_, commands) ->
+       commands ++ [Command.new()]
+     end)
+  end
 end

@@ -15,6 +15,7 @@ defmodule QueueTest do
     {:ok, command2} = Command.new(%{process: 2})
     {:ok, command3} = Command.new(%{process: 3})
     queue = Queue.new()
+    assert Queue.ticks(queue) == 0
     queue = Queue.push(queue, command1)
     queue = Queue.push(queue, command2)
     queue = Queue.push(queue, command3)

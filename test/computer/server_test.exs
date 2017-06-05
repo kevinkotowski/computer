@@ -4,7 +4,7 @@ defmodule SeverTest do
 
   alias Computer.Server
   alias Computer.Queue
-  alias Computer.Command
+  # alias Computer.Command
 
   test "new server" do
     server = Server.new()
