@@ -11,10 +11,10 @@ defmodule Computer.Queue do
     %Queue{commands: nil}
   end
 
-  def push(%Queue{} = queue, command) do
+  def push(%Queue{} = queue, [%Command{}|_] = commands) do
     case queue.commands do
-      nil -> %Queue{queue | commands: [command] }
-      _ -> %Queue{commands: queue.commands ++ [command] }
+      nil -> %Queue{queue | commands: commands }
+      _ -> %Queue{commands: queue.commands ++ commands }
     end
   end
 
@@ -24,9 +24,12 @@ defmodule Computer.Queue do
   end
 
   def ticks(%Queue{} = queue) do
-    Enum.reduce queue.commands, 0, fn(command, acc) ->
-      ticks = Command.duration(command)
-      ticks + acc
+    case queue.commands do
+      nil -> 0
+      _ -> Enum.reduce queue.commands, 0, fn(command, acc) ->
+        ticks = Command.duration(command)
+        ticks + acc
+      end
     end
   end
 end

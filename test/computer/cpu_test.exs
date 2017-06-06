@@ -6,7 +6,7 @@ defmodule CpuTest do
   alias Computer.Command
 
   test "new cpu" do
-    cpu = Cpu.new
+    cpu = Cpu.new()
     assert cpu.command.sync == :block
     assert cpu.command.wait == 0
     assert cpu.command.process == 0
@@ -15,7 +15,7 @@ defmodule CpuTest do
   end
 
   test "cpu fetch is okay" do
-    cpu = Cpu.new
+    cpu = Cpu.new()
     {:ok, command} = Command.new(%{process: 2, wait: 1})
 
     {:ok, cpu} = Cpu.fetch(cpu, command)
@@ -28,7 +28,7 @@ defmodule CpuTest do
   end
 
   test "cpu fetch is busy" do
-    cpu = Cpu.new
+    cpu = Cpu.new()
     {:ok, command} = Command.new(%{process: 2, wait: 1})
 
     {:ok, cpu} = Cpu.fetch(cpu, command)
