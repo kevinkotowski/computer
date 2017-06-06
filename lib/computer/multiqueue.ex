@@ -21,10 +21,10 @@ defmodule Computer.Multiqueue do
     Enum.count(multi.queues)
   end
 
-  def push(%Multiqueue{} = multi, %Command{} = command) do
+  def push(%Multiqueue{} = multi, [%Command{}|_] = commands) do
     %Multiqueue{queues:
       List.update_at(multi.queues, shortest(multi), fn(queue) ->
-        Computer.Queue.push(queue, command)
+        Computer.Queue.push(queue, commands)
       end)
     }
   end

@@ -11,10 +11,10 @@ defmodule Computer.Queue do
     %Queue{commands: nil}
   end
 
-  def push(%Queue{} = queue, %Command{} = command) do
+  def push(%Queue{} = queue, [%Command{}|_] = commands) do
     case queue.commands do
-      nil -> %Queue{queue | commands: [command] }
-      _ -> %Queue{commands: queue.commands ++ [command] }
+      nil -> %Queue{queue | commands: commands }
+      _ -> %Queue{commands: queue.commands ++ commands }
     end
   end
 
