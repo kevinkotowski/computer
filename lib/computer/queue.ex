@@ -23,7 +23,7 @@ defmodule Computer.Queue do
     {%Queue{commands: rest}, first}
   end
 
-  def ticks(%Queue{} = queue) do
+  def peek(%Queue{} = queue) do
     case queue.commands do
       nil -> 0
       _ -> Enum.reduce queue.commands, 0, fn(command, acc) ->

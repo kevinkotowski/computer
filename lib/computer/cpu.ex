@@ -13,9 +13,9 @@ defmodule Computer.Cpu do
 
   @spec fetch(t, Command) :: {:ok, t} | {:busy, integer}
   def fetch(%Cpu{} = cpu, %Command{} = command) do
-    case idle?(cpu) do
-      true -> {:ok, %Cpu{command: command}}
-      false -> {:busy, Command.duration(cpu.command)}
+    case peek(cpu) do
+      0 -> {:ok, %Cpu{command: command}}
+      _ -> {:busy, Command.duration(cpu.command)}
     end
   end
 
@@ -33,7 +33,7 @@ defmodule Computer.Cpu do
     end
   end
 
-  def idle?(%Cpu{} = cpu) do
-    Command.duration(cpu.command) < 1
+  def peek(%Cpu{} = cpu) do
+    Command.duration(cpu.command)
   end
 end

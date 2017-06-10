@@ -7,7 +7,7 @@ defmodule QueueTest do
 
   test "new command queue" do
     queue = Queue.new()
-    assert Queue.ticks(queue) == 0
+    assert Queue.peek(queue) == 0
   end
 
   test "push and pop commands" do
@@ -15,15 +15,15 @@ defmodule QueueTest do
     {:ok, command2} = Command.new(%{process: 2})
     {:ok, command3} = Command.new(%{process: 3})
     queue = Queue.new()
-    assert Queue.ticks(queue) == 0
+    assert Queue.peek(queue) == 0
     queue = Queue.push(queue, [command1])
     queue = Queue.push(queue, [command2, command3])
-    assert Queue.ticks(queue) == 6
+    assert Queue.peek(queue) == 6
 
     {queue, command} = Queue.pop(queue)
     assert Command.duration(command) == 1
     {queue, command} = Queue.pop(queue)
     assert Command.duration(command) == 2
-    assert Queue.ticks(queue) == 3
+    assert Queue.peek(queue) == 3
   end
 end

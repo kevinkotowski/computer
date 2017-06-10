@@ -39,11 +39,11 @@ defmodule Computer.Multiqueue do
 
   def shortest(%Multiqueue{} = multi) do
     shortest = Enum.min_by(Enum.with_index(multi.queues),
-      fn({queue, _index}) -> Computer.Queue.ticks(queue) end)
+      fn({queue, _index}) -> Computer.Queue.peek(queue) end)
     elem(shortest, 1)
   end
 
-  def ticks(%Multiqueue{} = multi) do
-    Enum.map(multi.queues, fn(queue) -> Computer.Queue.ticks(queue) end)
+  def peek(%Multiqueue{} = multi) do
+    Enum.map(multi.queues, fn(queue) -> Computer.Queue.peek(queue) end)
   end
 end

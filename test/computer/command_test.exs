@@ -35,5 +35,4 @@ defmodule CommandTest do
     assert command.sync == :async
     assert Command.duration(command) == 15
   end
-
 end

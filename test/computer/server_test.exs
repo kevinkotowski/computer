@@ -3,13 +3,26 @@ defmodule SeverTest do
   doctest Computer.Server
 
   alias Computer.Server
-  alias Computer.Queue
   # alias Computer.Command
 
   test "new server" do
     server = Server.new()
     assert server.tick == 0
-    assert Queue.ticks(server.requests) == 0
+    assert Server.peek(server) == %{
+      requests: [0,0,0,0],
+      tasks: [0,0,0,0],
+      cpus: [0,0]
+    }
+  end
+
+  test "new server assign single threaded sizes" do
+    server = Server.new(1,1,1)
+    assert server.tick == 0
+    assert Server.peek(server) == %{
+      requests: [0],
+      tasks: [0],
+      cpus: [0]
+    }
   end
 
   # test "push and pop commands" do

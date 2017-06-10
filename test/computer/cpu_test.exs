@@ -10,7 +10,7 @@ defmodule CpuTest do
     assert cpu.command.sync == :block
     assert cpu.command.wait == 0
     assert cpu.command.process == 0
-    assert true = Cpu.idle?(cpu)
+    assert Cpu.peek(cpu) == 0
     assert {:idle, _cpu} = Cpu.tick(cpu)
   end
 

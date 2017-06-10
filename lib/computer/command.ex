@@ -10,7 +10,7 @@ defmodule Computer.Command do
   def new() do
     { :ok, %Command{} }
   end
-  def new(command) do
+  def new(%{process: _} = command) do
     { :ok, Map.merge(%Command{}, command) }
   end
 
