@@ -13,7 +13,7 @@ defmodule ProcessesTest do
     assert Processes.peek(processes) == [0,0,0,0]
   end
 
-  test "push programs and commands" do
+  test "push command lists" do
     processes = Processes.new(3)
       |> Processes.push(build_program(3))
       |> Processes.push(build_program(4))
@@ -32,14 +32,17 @@ defmodule ProcessesTest do
     assert Processes.peek(processes) == [12,10,6]
   end
 
-  test "pop blocking commands" do
+  test "pop blocking commands and rotate queues" do
     processes = Processes.new(3)
       |> Processes.push(build_program(3))
       |> Processes.push(build_program(2))
-    assert Processes.peek(processes) == [6,3,0]
+      |> Processes.push(build_program(4))
+      |> Processes.push(build_program(3))
+      |> Processes.push(build_program(1))
+    assert Processes.peek(processes) == [7,9,10]
     {processes, commands} = Processes.pop(processes)
     assert Computer.Queue.peek(commands) == 6
-    assert Processes.peek(processes) == [3,0,0]
+    assert Processes.peek(processes) == [9,10,1]
   end
 
   def build_program(count) do

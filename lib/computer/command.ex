@@ -4,14 +4,14 @@ defmodule Computer.Command do
   defstruct sync: :block, wait: 0, execute: 0
 
   @type t :: %Command{}
-  @type sync :: :block | :async
+  @type sync :: :block | :async | :end
   @type unit :: :wait | :execute | :idle
 
-  def new(%{idle: _} = command) do
-    { :ok, Map.merge(%Command{}, command) }
+  def new() do
+    {:ok, %Command{}}
   end
   def new(%{execute: _} = command) do
-    { :ok, Map.merge(%Command{}, command) }
+    {:ok, Map.merge(%Command{}, command)}
   end
 
   @spec duration(t) :: integer

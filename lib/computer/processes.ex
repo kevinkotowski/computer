@@ -18,6 +18,9 @@ defmodule Computer.Processes do
   end
 
   def push(%Processes{} = multi, [%Command{}|_] = commands) do
+    commands = List.update_at(commands, -1, fn(command) ->
+      %{command | sync: :end}
+    end)
     %Processes{queues:
       List.update_at(multi.queues, shortest(multi), fn(queue) ->
         Computer.Queue.append(queue, commands)
@@ -36,25 +39,15 @@ defmodule Computer.Processes do
     {queue, command} = Computer.Queue.pop(queue)
     case command do
       nil -> {queue, commands}
-      _ -> case command.sync do
-        :block ->
-          commands = Computer.Queue.append(commands, [command])
-          {queue, commands} = pop_blocking(queue, commands)
-        _ ->
-          {queue, Computer.Queue.append(commands, [command])}
-      end
+      %Command{sync: :block} ->
+        commands = Computer.Queue.append(commands, [command])
+        pop_blocking(queue, commands)
+      %Command{sync: :end} ->
+        commands = Computer.Queue.append(commands, [command])
+        {queue, commands}
+      _ ->
+        {queue, Computer.Queue.append(commands, [command])}
     end
-    # with {queue, command} <- Computer.Queue.pop(queue)
-    # do
-    #     case command.sync do
-    #       :block ->
-    #         commands = Computer.Queue.append(commands, [command])
-    #         {queue, commands} = pop_blocking(queue, commands)
-    #       _ ->
-    #         {queue, Computer.Queue.append(commands, [command])}
-    #     end
-    #   end
-    # else {queue, nil} -> {queue, commands}
   end
 
   def shortest(%Processes{} = multi) do

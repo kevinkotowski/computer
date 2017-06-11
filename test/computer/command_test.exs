@@ -28,4 +28,16 @@ defmodule CommandTest do
     assert command.sync == :async
     assert Command.duration(command) == 15
   end
+
+  test "idle command" do
+    assert {:ok, command} = Command.new()
+    assert Command.duration(command) == 0
+  end
+
+  test "set :end" do
+    assert {:ok, command} = Command.new(%{sync: :async, wait: 5, execute: 10})
+    command = %{command | sync: :end}
+    assert command.sync == :end
+    assert Command.duration(command) == 15
+  end
 end

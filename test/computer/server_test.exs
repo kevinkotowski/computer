@@ -3,13 +3,12 @@ defmodule SeverTest do
   doctest Computer.Server
 
   alias Computer.Server
-  # alias Computer.Command
 
   test "new server" do
     server = Server.new()
     assert server.tick == 0
     assert Server.peek(server) == %{
-      requests: [0,0,0,0],
+      processes: [0,0,0,0],
       tasks: [0,0,0,0],
       cpus: [0,0]
     }
@@ -19,7 +18,7 @@ defmodule SeverTest do
     server = Server.new(1,1,1)
     assert server.tick == 0
     assert Server.peek(server) == %{
-      requests: [0],
+      processes: [0],
       tasks: [0],
       cpus: [0]
     }

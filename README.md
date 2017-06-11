@@ -5,7 +5,7 @@ This is a simulator to demonstrate the implications of blocking computer program
 This app shows how the nuance of how concurrency _can_ help, but doesn't always.
 **Spoiler Alert:** Any commands with wait time (like IO), will be more efficient in a concurrent environment.
 
-Finally, the app will demonstrate the advantage of being able to run with full parallelism. 
+Finally, the app will demonstrate the advantage of being able to run with full parallelism.
 
 ## Installation
 
@@ -21,3 +21,11 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/computer](https://hexdocs.pm/computer).
+
+## Development
+
+```
+$ iex -S mix
+```
+
+This runs a watching test process as well as allowing you to REPL.
