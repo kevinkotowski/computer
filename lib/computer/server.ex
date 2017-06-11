@@ -1,4 +1,4 @@
-defmodule Computer.Server do
+defmodule Computer.Runtime do
   alias __MODULE__
   alias Computer.Cpu
   alias Computer.Command
@@ -7,7 +7,7 @@ defmodule Computer.Server do
 
   defstruct [:tick, :processes, :tasks, :cpus]
 
-  @opaque t :: %Server{
+  @opaque t :: %Runtime{
     tick: integer,
     processes: Computer.Processes,
     tasks: Computer.Tasks,
@@ -18,12 +18,16 @@ defmodule Computer.Server do
     new(4,4,2)
   end
   def new(process_queues, task_queues, cpu_queues) do
-    %Server{
+    %Runtime{
       tick: 0,
-      processes: Computer.Processes.new(process_queues),
-      tasks: Computer.Tasks.new(task_queues),
+      processes: Processes.new(process_queues),
+      tasks: Tasks.new(task_queues),
       cpus: Enum.reduce(1..cpu_queues, [], fn(_, cpus) -> cpus ++ [Cpu.new()] end)
     }
+  end
+
+  def push(%Runtime{} = runtime, [%Command{}|_] = commands) do
+    %Runtime{runtime | processes: Processes.push(runtime.processes, commands)}
   end
 
   def peek(server) do

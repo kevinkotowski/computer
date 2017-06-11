@@ -40,9 +40,37 @@ defmodule ProcessesTest do
       |> Processes.push(build_program(3))
       |> Processes.push(build_program(1))
     assert Processes.peek(processes) == [7,9,10]
+
     {processes, commands} = Processes.pop(processes)
     assert Computer.Queue.peek(commands) == 6
     assert Processes.peek(processes) == [9,10,1]
+
+    {processes, commands} = Processes.pop(processes)
+    assert Computer.Queue.peek(commands) == 3
+    assert Processes.peek(processes) == [10,1,6]
+
+    {processes, commands} = Processes.pop(processes)
+    assert Computer.Queue.peek(commands) == 10
+    assert Processes.peek(processes) == [1,6,0]
+
+    {processes, commands} = Processes.pop(processes)
+    assert Computer.Queue.peek(commands) == 1
+    assert Processes.peek(processes) == [6,0,0]
+
+    processes = Processes.push(processes, build_program(1))
+    assert Processes.peek(processes) == [6,1,0]
+
+    {processes, commands} = Processes.pop(processes)
+    assert Computer.Queue.peek(commands) == 6
+    assert Processes.peek(processes) == [1,0,0]
+
+    {processes, commands} = Processes.pop(processes)
+    assert Computer.Queue.peek(commands) == 1
+    assert Processes.peek(processes) == [0,0,0]
+
+    {processes, commands} = Processes.pop(processes)
+    assert Computer.Queue.peek(commands) == 0
+    assert Processes.peek(processes) == [0,0,0]
   end
 
   def build_program(count) do
@@ -51,5 +79,4 @@ defmodule ProcessesTest do
       commands ++ [command]
     end)
   end
-
 end
