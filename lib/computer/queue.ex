@@ -8,10 +8,10 @@ defmodule Computer.Queue do
 
   @spec new() :: t
   def new() do
-    %Queue{commands: nil}
+    %Queue{commands: []}
   end
 
-  def push(%Queue{} = queue, [%Command{}|_] = commands) do
+  def append(%Queue{} = queue, [%Command{}|_] = commands) do
     case queue.commands do
       nil -> %Queue{queue | commands: commands }
       _ -> %Queue{commands: queue.commands ++ commands }
@@ -19,17 +19,21 @@ defmodule Computer.Queue do
   end
 
   def pop(%Queue{} = queue) do
-    [first | rest] = queue.commands
-    {%Queue{commands: rest}, first}
+    case queue.commands do
+      [] -> nil
+      _ ->
+        [head | tail] = queue.commands
+        {%Queue{commands: tail}, head}
+    end
   end
 
   def peek(%Queue{} = queue) do
     case queue.commands do
-      nil -> 0
+      [] -> 0
       _ -> Enum.reduce queue.commands, 0, fn(command, acc) ->
-        ticks = Command.duration(command)
-        ticks + acc
-      end
+          ticks = Command.duration(command)
+          ticks + acc
+        end
     end
   end
 end

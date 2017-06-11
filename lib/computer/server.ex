@@ -13,7 +13,6 @@ defmodule Computer.Server do
     cpus: [Cpu]
   }
 
-  @spec new() :: t
   def new() do
     new(4,4,2)
   end

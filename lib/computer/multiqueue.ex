@@ -8,7 +8,7 @@ defmodule Computer.Multiqueue do
     queues: [Computer.Queue]
   }
 
-  @spec new(integer) :: t
+  # @spec new(integer) :: t
   def new(count) do
     %Multiqueue{queues:
       Enum.reduce(1..count, [], fn(_, queues) ->
@@ -17,22 +17,18 @@ defmodule Computer.Multiqueue do
     }
   end
 
-  def count(%Multiqueue{} = multi) do
-    Enum.count(multi.queues)
-  end
-
   def push(%Multiqueue{} = multi, [%Command{}|_] = commands) do
     %Multiqueue{queues:
       List.update_at(multi.queues, shortest(multi), fn(queue) ->
-        Computer.Queue.push(queue, commands)
+        Computer.Queue.append(queue, commands)
       end)
     }
   end
 
   def pop(%Multiqueue{} = multi) do
-    [first | rest] = multi.queues
-    {first, command} = Computer.Queue.pop(first)
-    queues = rest ++ [first]
+    [head | tail] = multi.queues
+    {head, command} = Computer.Queue.pop(head)
+    queues = tail ++ [head]
 
     {%Multiqueue{queues: queues}, command}
   end

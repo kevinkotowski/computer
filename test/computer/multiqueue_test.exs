@@ -3,21 +3,21 @@ defmodule MultiqueueTest do
   doctest Computer.Multiqueue
 
   alias Computer.Multiqueue
+  alias Computer.Queue
   alias Computer.Command
 
   test "new multiqueue" do
     multi = Multiqueue.new(1)
-    assert Multiqueue.count(multi) == 1
+    assert Multiqueue.peek(multi) == [0]
 
     multi = Multiqueue.new(4)
-    assert Multiqueue.count(multi) == 4
     assert Multiqueue.peek(multi) == [0,0,0,0]
   end
 
   test "push and pop commands" do
-    {:ok, command1} = Command.new(%{process: 1})
-    {:ok, command2} = Command.new(%{process: 2})
-    {:ok, command3} = Command.new(%{process: 3})
+    {:ok, command1} = Command.new(%{execute: 1})
+    {:ok, command2} = Command.new(%{execute: 2})
+    {:ok, command3} = Command.new(%{execute: 3})
 
     multi = Multiqueue.new(3)
       |> Multiqueue.push([command3])
@@ -26,9 +26,9 @@ defmodule MultiqueueTest do
     assert Multiqueue.shortest(multi) == 1
     assert Multiqueue.peek(multi) == [3,1,2]
 
-    {:ok, command4} = Command.new(%{process: 4})
-    {:ok, command5} = Command.new(%{process: 5})
-    {:ok, command6} = Command.new(%{process: 6})
+    {:ok, command4} = Command.new(%{execute: 4})
+    {:ok, command5} = Command.new(%{execute: 5})
+    {:ok, command6} = Command.new(%{execute: 6})
     multi = Multiqueue.push(multi, [command4])
       |> Multiqueue.push([command5])
       |> Multiqueue.push([command6])
@@ -51,10 +51,10 @@ defmodule MultiqueueTest do
     assert Multiqueue.peek(multi) == [4,5,0]
   end
 
-  test "push and pop dependent commands" do
-    {:ok, command1} = Command.new(%{process: 1})
-    {:ok, command2} = Command.new(%{process: 2})
-    {:ok, command3} = Command.new(%{process: 3})
+  test "push and pop command list" do
+    {:ok, command1} = Command.new(%{execute: 1})
+    {:ok, command2} = Command.new(%{execute: 2})
+    {:ok, command3} = Command.new(%{execute: 3})
 
     program = [command1, command2, command3]
 
@@ -62,11 +62,5 @@ defmodule MultiqueueTest do
       |> Multiqueue.push(program)
     assert Multiqueue.shortest(multi) == 1
     assert Multiqueue.peek(multi) == [6,0,0]
-  end
-
-  def new_program(count) do
-     Enum.reduce(1..count, [], fn(_, commands) ->
-       commands ++ [Command.new()]
-     end)
   end
 end

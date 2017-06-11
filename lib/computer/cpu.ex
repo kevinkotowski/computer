@@ -7,7 +7,7 @@ defmodule Computer.Cpu do
   @opaque t :: %Cpu{command: Command}
 
   def new() do
-    {:ok, command} = Command.new()
+    {:ok, command} = Command.new(%{idle: 0})
     %Cpu{command: command}
   end
 
@@ -22,12 +22,12 @@ defmodule Computer.Cpu do
   @spec tick(t) :: {Command.unit, t}
   def tick(%Cpu{} = cpu) do
     case cpu.command do
-      %{wait: 0, process: 0} ->
+      %{wait: 0, execute: 0} ->
         {:idle, cpu}
-      %{wait: 0, process: x} when x > 0 ->
-        command = Map.merge(cpu.command, %{process: x - 1})
+      %{wait: 0, execute: x} when x > 0 ->
+        command = Map.merge(cpu.command, %{execute: x - 1})
         {:process, %Cpu{command: command}}
-      %{wait: x, process: _} when x > 0 ->
+      %{wait: x, execute: _} when x > 0 ->
         command = Map.merge(cpu.command, %{wait: x - 1})
         {:wait, %Cpu{command: command}}
     end

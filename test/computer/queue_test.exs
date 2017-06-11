@@ -11,13 +11,13 @@ defmodule QueueTest do
   end
 
   test "push and pop commands" do
-    {:ok, command1} = Command.new(%{process: 1})
-    {:ok, command2} = Command.new(%{process: 2})
-    {:ok, command3} = Command.new(%{process: 3})
+    {:ok, command1} = Command.new(%{execute: 1})
+    {:ok, command2} = Command.new(%{execute: 2})
+    {:ok, command3} = Command.new(%{execute: 3})
     queue = Queue.new()
     assert Queue.peek(queue) == 0
-    queue = Queue.push(queue, [command1])
-    queue = Queue.push(queue, [command2, command3])
+    queue = Queue.append(queue, [command1])
+    queue = Queue.append(queue, [command2, command3])
     assert Queue.peek(queue) == 6
 
     {queue, command} = Queue.pop(queue)

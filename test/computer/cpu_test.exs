@@ -9,14 +9,14 @@ defmodule CpuTest do
     cpu = Cpu.new()
     assert cpu.command.sync == :block
     assert cpu.command.wait == 0
-    assert cpu.command.process == 0
+    assert cpu.command.execute == 0
     assert Cpu.peek(cpu) == 0
     assert {:idle, _cpu} = Cpu.tick(cpu)
   end
 
   test "cpu fetch is okay" do
     cpu = Cpu.new()
-    {:ok, command} = Command.new(%{process: 2, wait: 1})
+    {:ok, command} = Command.new(%{execute: 2, wait: 1})
 
     {:ok, cpu} = Cpu.fetch(cpu, command)
     assert cpu.command.wait == 1
@@ -29,7 +29,7 @@ defmodule CpuTest do
 
   test "cpu fetch is busy" do
     cpu = Cpu.new()
-    {:ok, command} = Command.new(%{process: 2, wait: 1})
+    {:ok, command} = Command.new(%{execute: 2, wait: 1})
 
     {:ok, cpu} = Cpu.fetch(cpu, command)
     {:busy, ticks} = Cpu.fetch(cpu, command)

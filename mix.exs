@@ -29,5 +29,6 @@ defmodule Computer.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:dialyxir, "~> 0.5", only: [:dev], runtime: false}]
+    [{:mix_test_watch, "~> 0.3", only: :dev}]
   end
 end
