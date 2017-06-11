@@ -27,21 +27,34 @@ defmodule Computer.Processes do
 
   def pop(%Processes{} = multi) do
     [head | tail] = multi.queues
-    {head, commands} = pop_blocking(head, [])
+    {head, commands} = pop_blocking(head, Computer.Queue.new())
     queues = tail ++ [head]
     {%Processes{queues: queues}, commands}
   end
 
   defp pop_blocking(queue, commands) do
     {queue, command} = Computer.Queue.pop(queue)
-    case command.sync do
-      :block ->
-        # {queue, commands ++ [command]}
-        commands = commands ++ [command]
-        {queue, commands} = pop_blocking(queue, commands)
-      _ ->
-        {queue, commands ++ [command]}
+    case command do
+      nil -> {queue, commands}
+      _ -> case command.sync do
+        :block ->
+          commands = Computer.Queue.append(commands, [command])
+          {queue, commands} = pop_blocking(queue, commands)
+        _ ->
+          {queue, Computer.Queue.append(commands, [command])}
+      end
     end
+    # with {queue, command} <- Computer.Queue.pop(queue)
+    # do
+    #     case command.sync do
+    #       :block ->
+    #         commands = Computer.Queue.append(commands, [command])
+    #         {queue, commands} = pop_blocking(queue, commands)
+    #       _ ->
+    #         {queue, Computer.Queue.append(commands, [command])}
+    #     end
+    #   end
+    # else {queue, nil} -> {queue, commands}
   end
 
   def shortest(%Processes{} = multi) do

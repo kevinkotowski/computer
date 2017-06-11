@@ -20,7 +20,7 @@ defmodule Computer.Queue do
 
   def pop(%Queue{} = queue) do
     case queue.commands do
-      [] -> nil
+      [] -> {queue, nil}
       _ ->
         [head | tail] = queue.commands
         {%Queue{commands: tail}, head}

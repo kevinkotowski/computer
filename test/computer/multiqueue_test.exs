@@ -3,7 +3,6 @@ defmodule MultiqueueTest do
   doctest Computer.Multiqueue
 
   alias Computer.Multiqueue
-  alias Computer.Queue
   alias Computer.Command
 
   test "new multiqueue" do

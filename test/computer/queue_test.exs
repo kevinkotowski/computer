@@ -25,5 +25,11 @@ defmodule QueueTest do
     {queue, command} = Queue.pop(queue)
     assert Command.duration(command) == 2
     assert Queue.peek(queue) == 3
+    {queue, command} = Queue.pop(queue)
+    assert Command.duration(command) == 3
+    assert Queue.peek(queue) == 0
+
+    {_queue, command} = Queue.pop(queue)
+    assert command == nil
   end
 end
